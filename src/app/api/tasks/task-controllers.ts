@@ -1,7 +1,7 @@
 import { TaskService } from "./task-services";
 import { TaskDTO, UpdateTaskDTO } from "./task-dto";
 
-export class TaskController {
+class TaskController {
   private taskService: TaskService;
 
   constructor() {
@@ -28,3 +28,7 @@ export class TaskController {
     return this.taskService.delete(id);
   }
 }
+
+const taskController = new TaskController();
+
+export { taskController };

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { TaskController } from "./task-controllers";
-import { TaskDTO, UpdateTaskDTO } from "./task-dto";
-
-export const taskController = new TaskController();
+import { taskController } from "./task-controllers";
+import { TaskDTO } from "./task-dto";
 
 export async function GET() {
   try {

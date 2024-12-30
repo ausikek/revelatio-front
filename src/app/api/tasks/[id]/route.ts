@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { TaskController } from "../task-controllers";
-import { TaskDTO, UpdateTaskDTO } from "../task-dto";
-
-export const taskController = new TaskController();
+import { taskController } from "../task-controllers";
+import { UpdateTaskDTO } from "../task-dto";
 
 export async function PATCH(req: NextRequest) {
   const id: string | undefined = req.nextUrl.pathname.split("/").pop();
