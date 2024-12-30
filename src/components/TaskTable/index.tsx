@@ -8,20 +8,26 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
 import { Task } from "@/interfaces";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { fetcher } from "@/lib/utils";
+import { useIsLarge } from "@/hooks/use-large";
+import { fetcher, statusFilter, searchFilter } from "@/lib/utils";
+import { useState } from "react";
 import useSWR from "swr";
 import EditTaskButton from "@/components/EditTask";
 import RemoveTaskButton from "@/components/RemoveTask";
 import ShowTask from "@/components/ShowTask";
 import TaskStatus from "@/components/TaskStatus";
-import { useIsLarge } from "@/hooks/use-large";
+import StatusFilter from "@/components/StatusFilter";
 
 export default function Tasks() {
+  const { data } = useSWR<Task[]>("/api/tasks", fetcher);
   const isMobile = useIsMobile();
   const isLarge = useIsLarge();
-  const { data } = useSWR<Task[]>("/api/tasks", fetcher);
+
+  const [status, setStatus] = useState("");
+  const [search, setSearch] = useState("");
 
   if (!data) {
     return <h1>Você não possui tasks cadastradas</h1>;
@@ -32,39 +38,51 @@ export default function Tasks() {
   }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="text-left">Título</TableHead>
-          {!isMobile && <TableHead className="text-left">Descrição</TableHead>}
-          <TableHead className="text-left">Status</TableHead>
-          <TableHead className="text-center">Ações</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((task) => (
-          <TableRow key={task.id} className="items-center">
-            <TableCell className="text-left">
-              {isLarge && task.title.length > 12
-                ? task.title.slice(0, 10).padEnd(12, "...")
-                : task.title}
-            </TableCell>
+    <div className="w-full flex flex-col gap-4">
+      <div className="flex flex-row gap-4">
+        <Input
+          placeholder="Pesquisar..."
+          className="w-40 lg:w-1/4"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <StatusFilter status={status} setStatus={setStatus} />
+      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-left">Título</TableHead>
             {!isMobile && (
-              <TableCell className="text-left flex flex-row">
-                <ShowTask task={task} />
-              </TableCell>
+              <TableHead className="text-left">Descrição</TableHead>
             )}
-            <TableCell className="text-right">
-              <TaskStatus status={task.status} />
-            </TableCell>
-            <TableCell className="flex gap-2 justify-center text-right">
-              {isMobile && <ShowTask task={task} />}
-              <EditTaskButton taskID={task.id} task={task} />
-              <RemoveTaskButton taskID={task.id} />
-            </TableCell>
+            <TableHead className="text-left">Status</TableHead>
+            <TableHead className="text-center">Ações</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {statusFilter(status, searchFilter(search, data)).map((task) => (
+            <TableRow key={task.id} className="items-center">
+              <TableCell className="text-left">
+                {isLarge && task.title.length > 12
+                  ? task.title.slice(0, 10).padEnd(12, "...")
+                  : task.title}
+              </TableCell>
+              {!isMobile && (
+                <TableCell className="text-left flex flex-row">
+                  <ShowTask task={task} />
+                </TableCell>
+              )}
+              <TableCell className="text-right">
+                <TaskStatus status={task.status} />
+              </TableCell>
+              <TableCell className="flex gap-2 justify-center text-right">
+                {isMobile && <ShowTask task={task} />}
+                <EditTaskButton taskID={task.id} task={task} />
+                <RemoveTaskButton taskID={task.id} />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
