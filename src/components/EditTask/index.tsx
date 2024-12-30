@@ -42,7 +42,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
+import { CircleCheck, CircleDashed, Loader } from "lucide-react";
 
 interface EditTaskButtonProps {
   taskID: string;
@@ -143,9 +144,24 @@ export default function EditTaskButton({ taskID, task }: EditTaskButtonProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="TODO">A Fazer</SelectItem>
-                        <SelectItem value="DOING">Em Progresso</SelectItem>
-                        <SelectItem value="DONE">Concluída</SelectItem>
+                        <SelectItem value="TODO">
+                          <div className="flex flex-row items-center gap-2">
+                            <p>A Fazer</p>
+                            <CircleDashed className="h-4 w-4" />
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="DOING">
+                          <div className="flex flex-row items-center gap-2">
+                            <p>Em Progresso</p>
+                            <Loader className="h-4 w-4" />
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="DONE">
+                          <div className="flex flex-row items-center gap-2">
+                            <p>Concluída</p>
+                            <CircleCheck className="h-4 w-4" />
+                          </div>
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -207,6 +223,46 @@ export default function EditTaskButton({ taskID, task }: EditTaskButtonProps) {
                       className="resize-none h-36"
                     />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={task.status} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="TODO">
+                        <div className="flex flex-row items-center gap-2">
+                          <p>A Fazer</p>
+                          <CircleDashed className="h-4 w-4" />
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="DOING">
+                        <div className="flex flex-row items-center gap-2">
+                          <p>Em Progresso</p>
+                          <Loader className="h-4 w-4" />
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="DONE">
+                        <div className="flex flex-row items-center gap-2">
+                          <p>Concluída</p>
+                          <CircleCheck className="h-4 w-4" />
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
