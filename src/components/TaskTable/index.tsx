@@ -14,7 +14,6 @@ import EditTaskButton from "@/components/EditTask";
 import RemoveTaskButton from "@/components/RemoveTask";
 import ShowTask from "@/components/ShowTask";
 import TaskStatus from "@/components/TaskStatus";
-import { Eye } from "lucide-react";
 
 interface TaskPageProps {
   tasks: Task[];
