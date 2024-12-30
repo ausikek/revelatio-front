@@ -35,6 +35,14 @@ import { TaskSchema, TaskT } from "@/schemas";
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { mutate } from "swr";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface EditTaskButtonProps {
   taskID: string;
@@ -48,13 +56,26 @@ export default function EditTaskButton({ taskID, task }: EditTaskButtonProps) {
   const form = useForm<TaskT>({
     resolver: zodResolver(TaskSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      title: task.title,
+      description: task.description,
+      status: task.status,
     },
   });
 
-  const addOnSubmit = (data: TaskT) => {
-    console.log(data, taskID);
+  const editOnSubmit = async (data: TaskT) => {
+    try {
+      await fetch(`/api/tasks/${taskID}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      mutate("/api/tasks");
+    } catch {
+      console.error("Error adding task");
+    }
     setIsOpen(false);
   };
 
@@ -73,7 +94,7 @@ export default function EditTaskButton({ taskID, task }: EditTaskButtonProps) {
           </DialogHeader>
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(addOnSubmit)}
+              onSubmit={form.handleSubmit(editOnSubmit)}
               className="space-y-4"
             >
               <FormField
@@ -106,6 +127,31 @@ export default function EditTaskButton({ taskID, task }: EditTaskButtonProps) {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder={task.status} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="TODO">A Fazer</SelectItem>
+                        <SelectItem value="DOING">Em Progresso</SelectItem>
+                        <SelectItem value="DONE">Concluída</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <DialogFooter>
                 <Button type="submit" className="w-full">
                   Salvar
@@ -132,7 +178,7 @@ export default function EditTaskButton({ taskID, task }: EditTaskButtonProps) {
         </DrawerHeader>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(addOnSubmit)}
+            onSubmit={form.handleSubmit(editOnSubmit)}
             className="space-y-4 px-4"
           >
             <FormField

@@ -10,17 +10,24 @@ import {
 } from "@/components/ui/table";
 import { Task } from "@/interfaces";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { fetcher } from "@/lib/utils";
+import useSWR from "swr";
 import EditTaskButton from "@/components/EditTask";
 import RemoveTaskButton from "@/components/RemoveTask";
 import ShowTask from "@/components/ShowTask";
 import TaskStatus from "@/components/TaskStatus";
 
-interface TaskPageProps {
-  tasks: Task[];
-}
-
-export default function Tasks({ tasks }: TaskPageProps) {
+export default function Tasks() {
   const isMobile = useIsMobile();
+  const { data } = useSWR<Task[]>("/api/tasks", fetcher);
+
+  if (!data) {
+    return <h1>Você não possui tasks cadastradas</h1>;
+  }
+
+  if (data.length === 0) {
+    return <h1>Nenhuma task cadastrada</h1>;
+  }
 
   return (
     <Table>
@@ -33,7 +40,7 @@ export default function Tasks({ tasks }: TaskPageProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {tasks.map((task) => (
+        {data.map((task) => (
           <TableRow key={task.id} className="items-center">
             <TableCell className="text-left">{task.title}</TableCell>
             {!isMobile && (

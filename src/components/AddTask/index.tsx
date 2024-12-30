@@ -35,6 +35,7 @@ import { TaskSchema, TaskT } from "@/schemas";
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { mutate } from "swr";
 
 export default function AddTaskButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,8 +49,21 @@ export default function AddTaskButton() {
     },
   });
 
-  const addOnSubmit = (data: TaskT) => {
-    console.log(data);
+  const addOnSubmit = async (data: TaskT) => {
+    try {
+      await fetch("/api/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      mutate("/api/tasks");
+    } catch {
+      console.error("Error adding task");
+    }
+
     setIsOpen(false);
   };
 

@@ -13,14 +13,23 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
+import { mutate } from "swr";
 
 export interface RemoveTaskButtonProps {
   taskID: string;
 }
 
 export default function RemoveTaskButton({ taskID }: RemoveTaskButtonProps) {
-  const removeOnSubmit = (taskID: string) => {
-    console.log(`Removing task with ID: ${taskID}`);
+  const removeOnSubmit = async (taskID: string) => {
+    try {
+      await fetch(`/api/tasks/${taskID}`, {
+        method: "DELETE",
+      });
+
+      mutate("/api/tasks");
+    } catch {
+      console.error("Error deleting task");
+    }
   };
 
   return (
