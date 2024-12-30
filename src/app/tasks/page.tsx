@@ -18,14 +18,14 @@ export default function TaskPage() {
             title: "Escolher paleta de cores",
             description:
               "Definir uma paleta de cores consistente para o projeto.",
-            status: "TODO",
+            status: "DOING",
           },
           {
             id: "3",
             title: "Desenhar ícones personalizados",
             description:
               "Criar um conjunto de ícones exclusivos para o sistema.",
-            status: "TODO",
+            status: "DONE",
           },
           {
             id: "4",
