@@ -150,7 +150,7 @@ export default function EditTaskButton({ taskID, task }: EditTaskButtonProps) {
                             <CircleDashed className="h-4 w-4" />
                           </div>
                         </SelectItem>
-                        <SelectItem value="DOING">
+                        <SelectItem value="PROGRESS">
                           <div className="flex flex-row items-center gap-2">
                             <p>Em Progresso</p>
                             <Loader className="h-4 w-4" />
@@ -249,7 +249,7 @@ export default function EditTaskButton({ taskID, task }: EditTaskButtonProps) {
                           <CircleDashed className="h-4 w-4" />
                         </div>
                       </SelectItem>
-                      <SelectItem value="DOING">
+                      <SelectItem value="PROGRESS">
                         <div className="flex flex-row items-center gap-2">
                           <p>Em Progresso</p>
                           <Loader className="h-4 w-4" />

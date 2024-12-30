@@ -19,7 +19,7 @@ interface StatusFilterProps {
 const statusMap: { [key: string]: string } = {
   ALL: "Todos",
   TODO: "A Fazer",
-  DOING: "Fazendo",
+  PROGRESS: "Fazendo",
   DONE: "Feito",
 };
 
@@ -36,13 +36,13 @@ export default function StatusFilter({ status, setStatus }: StatusFilterProps) {
         <DropdownMenuLabel>Filtrar por status</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup value={status} onValueChange={setStatus}>
-          {["ALL", "TODO", "DOING", "DONE"].map((status, idx) => {
+          {["ALL", "TODO", "PROGRESS", "DONE"].map((status, idx) => {
             return (
               <DropdownMenuRadioItem
                 key={idx}
                 value={status === "ALL" ? "" : status}
               >
-                {statusMap[`${status}`]}
+                {statusMap[status]}
               </DropdownMenuRadioItem>
             );
           })}

@@ -8,7 +8,7 @@ export default function TaskStatus({ status }: TaskStatusProps) {
   switch (status) {
     case "TODO":
       return <CircleDashed className="h-4 w-4" />;
-    case "DOING":
+    case "PROGRESS":
       return <Loader className="h-4 w-4" />;
     case "DONE":
       return <CircleCheck className="h-4 w-4" />;

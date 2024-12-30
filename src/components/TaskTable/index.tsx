@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Task } from "@/interfaces";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useIsLarge } from "@/hooks/use-large";
-import { fetcher, statusFilter, searchFilter } from "@/lib/utils";
+import { fetcher, applyAllFilters } from "@/lib/utils";
 import { useState } from "react";
 import useSWR from "swr";
 import EditTaskButton from "@/components/EditTask";
@@ -20,6 +20,7 @@ import RemoveTaskButton from "@/components/RemoveTask";
 import ShowTask from "@/components/ShowTask";
 import TaskStatus from "@/components/TaskStatus";
 import StatusFilter from "@/components/StatusFilter";
+import StatusOrdering from "../StatusOrdering";
 
 export default function Tasks() {
   const { data } = useSWR<Task[]>("/api/tasks", fetcher);
@@ -28,6 +29,7 @@ export default function Tasks() {
 
   const [status, setStatus] = useState("");
   const [search, setSearch] = useState("");
+  const [ascending, setAscending] = useState<string>("none");
 
   if (!data) {
     return <h1>Você não possui tasks cadastradas</h1>;
@@ -36,6 +38,8 @@ export default function Tasks() {
   if (data.length === 0) {
     return <h1>Nenhuma task cadastrada</h1>;
   }
+
+  const filteredData = applyAllFilters(ascending, search, status, data);
 
   return (
     <div className="w-full flex flex-col gap-4">
@@ -54,12 +58,17 @@ export default function Tasks() {
             {!isMobile && (
               <TableHead className="text-left">Descrição</TableHead>
             )}
-            <TableHead className="text-left">Status</TableHead>
+            <TableHead className="text-left">
+              <StatusOrdering
+                ascending={ascending}
+                setAscending={setAscending}
+              />
+            </TableHead>
             <TableHead className="text-center">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {statusFilter(status, searchFilter(search, data)).map((task) => (
+          {filteredData.map((task) => (
             <TableRow key={task.id} className="items-center">
               <TableCell className="text-left">
                 {isLarge && task.title.length > 12
@@ -83,6 +92,7 @@ export default function Tasks() {
           ))}
         </TableBody>
       </Table>
+      {filteredData.length === 0 && <h1>Nenhuma task encontrada.</h1>}
     </div>
   );
 }

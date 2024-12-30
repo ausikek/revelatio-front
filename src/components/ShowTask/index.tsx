@@ -20,7 +20,6 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useIsLarge } from "@/hooks/use-large";
 import { Eye } from "lucide-react";
 import { Task } from "@/interfaces";
 
@@ -31,7 +30,6 @@ interface ShowTaskProps {
 export default function ShowTask({ task }: ShowTaskProps) {
   const [open, setOpen] = React.useState(false);
   const isMobile = useIsMobile();
-  const isLarge = useIsLarge();
 
   const minifiedDescription = task.description.slice(0, 25).padEnd(26, "…");
 
@@ -39,7 +37,7 @@ export default function ShowTask({ task }: ShowTaskProps) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger className="flex flex-row gap-2">
-          {!isLarge && task.description.length < 40
+          {task.description.length < 40
             ? task.description
             : minifiedDescription}
           {!isMobile && <Eye className="h-4 w-4" />}

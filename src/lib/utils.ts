@@ -10,8 +10,8 @@ export function statusFilter(status: string, task: Task[]) {
   switch (status) {
     case "TODO":
       return task.filter((task) => task.status === "TODO");
-    case "DOING":
-      return task.filter((task) => task.status === "DOING");
+    case "PROGRESS":
+      return task.filter((task) => task.status === "PROGRESS");
     case "DONE":
       return task.filter((task) => task.status === "DONE");
     default:
@@ -25,6 +25,39 @@ export function searchFilter(search: string, task: Task[]) {
       task.title.toLowerCase().includes(search.toLowerCase()) ||
       task.description.toLowerCase().includes(search.toLowerCase())
   );
+}
+
+export function orderByStatus(task: Task[], filter: string) {
+  switch (filter) {
+    case "asc":
+      return task.sort((a, b) => a.status.localeCompare(b.status));
+    case "des":
+      return task.sort((a, b) => b.status.localeCompare(a.status));
+    case "none":
+    default:
+      return task;
+  }
+}
+
+export function orderByTitle(task: Task[]) {
+  return task.sort((a, b) => {
+    if (a.title < b.title) {
+      return -1;
+    }
+    if (a.title > b.title) {
+      return 1;
+    }
+    return 0;
+  });
+}
+
+export function applyAllFilters(
+  asc: string,
+  search: string,
+  status: string,
+  task: Task[]
+) {
+  return orderByStatus(statusFilter(status, searchFilter(search, task)), asc);
 }
 
 export const fetcher = (...args: Parameters<typeof fetch>) =>
