@@ -39,7 +39,9 @@ export default function ShowTask({ task }: ShowTaskProps) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger className="flex flex-row gap-2">
-          {!isLarge ? task.description : minifiedDescription}
+          {!isLarge && task.description.length < 40
+            ? task.description
+            : minifiedDescription}
           {!isMobile && <Eye className="h-4 w-4" />}
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">

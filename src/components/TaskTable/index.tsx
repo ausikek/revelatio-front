@@ -16,9 +16,11 @@ import EditTaskButton from "@/components/EditTask";
 import RemoveTaskButton from "@/components/RemoveTask";
 import ShowTask from "@/components/ShowTask";
 import TaskStatus from "@/components/TaskStatus";
+import { useIsLarge } from "@/hooks/use-large";
 
 export default function Tasks() {
   const isMobile = useIsMobile();
+  const isLarge = useIsLarge();
   const { data } = useSWR<Task[]>("/api/tasks", fetcher);
 
   if (!data) {
@@ -42,7 +44,11 @@ export default function Tasks() {
       <TableBody>
         {data.map((task) => (
           <TableRow key={task.id} className="items-center">
-            <TableCell className="text-left">{task.title}</TableCell>
+            <TableCell className="text-left">
+              {isLarge && task.title.length > 12
+                ? task.title.slice(0, 10).padEnd(12, "...")
+                : task.title}
+            </TableCell>
             {!isMobile && (
               <TableCell className="text-left flex flex-row">
                 <ShowTask task={task} />
