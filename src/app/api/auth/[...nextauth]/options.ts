@@ -12,7 +12,7 @@ export const nextAuthOptions: NextAuthOptions = {
 
       //eslint-disable-next-line
       async authorize(credentials, req) {
-        const response = await fetch("http://localhost:3000/api/users", {
+        const response = await fetch(`${process.env.NEXTAUTH_URL}/api/users`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -48,14 +48,6 @@ export const nextAuthOptions: NextAuthOptions = {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       session = token.user as any;
       return session;
-    },
-  },
-  cookies: {
-    sessionToken: {
-      name: `__Secure-next-auth.session-token`,
-      options: {
-        secure: process.env.NODE_ENV === "production",
-      },
     },
   },
 };
