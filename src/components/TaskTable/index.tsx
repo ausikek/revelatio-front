@@ -27,22 +27,22 @@ import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 
 export default function Tasks() {
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
+
+  if (sessionStatus === "unauthenticated") {
+    redirect("/");
+  }
+
   const { data } = useSWR<Task[]>(
     session ? `/api/tasks/${session.id}` : "",
     fetcher
   );
   const isMobile = useIsMobile();
   const isLarge = useIsLarge();
-  const { status: sessionStatus } = useSession();
 
   const [status, setStatus] = useState("");
   const [search, setSearch] = useState("");
   const [ascending, setAscending] = useState<string>("none");
-
-  if (sessionStatus === "unauthenticated") {
-    redirect("/");
-  }
 
   if (!data) {
     return <LoadingTemplate />;
