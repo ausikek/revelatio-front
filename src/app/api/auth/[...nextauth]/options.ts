@@ -50,4 +50,12 @@ export const nextAuthOptions: NextAuthOptions = {
       return session;
     },
   },
+  cookies: {
+    sessionToken: {
+      name: `__Secure-next-auth.session-token`,
+      options: {
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+  },
 };
