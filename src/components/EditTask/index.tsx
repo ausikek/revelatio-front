@@ -77,7 +77,7 @@ export default function EditTaskButton({ taskID, task }: EditTaskButtonProps) {
         body: JSON.stringify(payload),
       });
 
-      mutate("/api/tasks");
+      mutate(`/api/tasks/${session?.id}`);
     } catch {
       console.error("Error adding task");
     }

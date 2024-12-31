@@ -63,7 +63,7 @@ export default function AddTaskButton() {
         body: JSON.stringify(payload),
       });
 
-      mutate("/api/tasks");
+      mutate(`/api/tasks/${session?.id}`);
     } catch {
       console.error("Error adding task");
     }

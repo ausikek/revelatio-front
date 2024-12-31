@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { mutate } from "swr";
 
 export interface RemoveTaskButtonProps {
@@ -20,13 +21,15 @@ export interface RemoveTaskButtonProps {
 }
 
 export default function RemoveTaskButton({ taskID }: RemoveTaskButtonProps) {
+  const { data: session } = useSession();
+
   const removeOnSubmit = async (taskID: string) => {
     try {
       await fetch(`/api/tasks/${taskID}`, {
         method: "DELETE",
       });
 
-      mutate("/api/tasks");
+      mutate(`/api/tasks/${session?.id}`);
     } catch {
       console.error("Error deleting task");
     }
