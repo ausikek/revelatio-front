@@ -2,6 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { taskController } from "../task-controllers";
 import { UpdateTaskDTO } from "../task-dto";
 
+export async function GET(req: NextRequest) {
+  const id: string | undefined = req.nextUrl.pathname.split("/").pop();
+
+  if (!id) {
+    return NextResponse.json({
+      status: 400,
+      message: "Bad Request",
+    });
+  }
+
+  const tasks = await taskController.getByUserId(id);
+
+  return NextResponse.json(tasks);
+}
+
 export async function PATCH(req: NextRequest) {
   const id: string | undefined = req.nextUrl.pathname.split("/").pop();
 

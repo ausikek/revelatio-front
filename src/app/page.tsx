@@ -1,7 +1,9 @@
+import LoginForm from "@/components/LoginForm";
+
 export default function Page() {
   return (
-    <div>
-      <h1>Page</h1>
+    <div className="w-full h-screen">
+      <LoginForm />
     </div>
   );
 }

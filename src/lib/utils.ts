@@ -104,5 +104,11 @@ export const convertStatus = (value: string) => {
   }
 };
 
+export const capitalize = (value: string | undefined) => {
+  if (value) {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+};
+
 export const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());

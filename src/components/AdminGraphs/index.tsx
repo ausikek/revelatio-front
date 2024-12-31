@@ -11,6 +11,8 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Task } from "@/interfaces";
 import { fetcher, getStatusCounts } from "@/lib/utils";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import useSWR from "swr";
 
@@ -32,6 +34,11 @@ const chartConfig = {
 export default function AdminCharts() {
   const { data } = useSWR<Task[]>("/api/tasks", fetcher);
   const isMobile = useIsMobile();
+  const { status: sessionStatus } = useSession();
+
+  if (sessionStatus === "unauthenticated") {
+    redirect("/");
+  }
 
   return (
     <div className="w-full">

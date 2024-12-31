@@ -44,6 +44,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CircleCheck, CircleDashed, Loader } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 interface EditTaskButtonProps {
   taskID: string;
@@ -53,6 +54,7 @@ interface EditTaskButtonProps {
 export default function EditTaskButton({ taskID, task }: EditTaskButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
+  const { data: session } = useSession();
 
   const form = useForm<TaskT>({
     resolver: zodResolver(TaskSchema),
@@ -65,12 +67,14 @@ export default function EditTaskButton({ taskID, task }: EditTaskButtonProps) {
 
   const editOnSubmit = async (data: TaskT) => {
     try {
+      const payload = { ...data, user: session };
+
       await fetch(`/api/tasks/${taskID}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
       mutate("/api/tasks");

@@ -1,5 +1,6 @@
-import { ClipboardList, Shield } from "lucide-react";
+"use client";
 
+import { ClipboardList, Shield } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -9,9 +10,13 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarFooter,
+  SidebarHeader,
 } from "@/components/ui/sidebar";
+import { LogoutButton } from "@/components/LogoutButton";
+import { useSession } from "next-auth/react";
+import { capitalize } from "@/lib/utils";
 
-// Menu items.
 const items = [
   {
     title: "Tasks",
@@ -26,11 +31,16 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const { data: session } = useSession();
+
   return (
     <Sidebar>
+      <SidebarHeader>
+        <SidebarGroupLabel>Revelatio Tasks</SidebarGroupLabel>
+        <h1 className="pl-2">Olá, {capitalize(session?.username)}</h1>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Revelatio Tasks</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -47,6 +57,9 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <LogoutButton />
+      </SidebarFooter>
     </Sidebar>
   );
 }

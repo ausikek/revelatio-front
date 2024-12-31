@@ -36,10 +36,12 @@ import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { mutate } from "swr";
+import { useSession } from "next-auth/react";
 
 export default function AddTaskButton() {
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
+  const { data: session } = useSession();
 
   const form = useForm<TaskT>({
     resolver: zodResolver(TaskSchema),
@@ -51,12 +53,14 @@ export default function AddTaskButton() {
 
   const addOnSubmit = async (data: TaskT) => {
     try {
+      const payload = { ...data, user: session };
+
       await fetch("/api/tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
       mutate("/api/tasks");

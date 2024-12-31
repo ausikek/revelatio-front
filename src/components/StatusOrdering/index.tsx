@@ -25,7 +25,6 @@ export default function StatusOrdering({
   ascending,
   setAscending,
 }: StatusFilterProps) {
-  console.log(ascending);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>

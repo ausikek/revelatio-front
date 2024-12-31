@@ -16,6 +16,10 @@ class TaskController {
     return this.taskService.getById(id);
   }
 
+  async getByUserId(userId: string) {
+    return this.taskService.getByUserId(userId);
+  }
+
   async create(data: TaskDTO) {
     return this.taskService.create(data);
   }

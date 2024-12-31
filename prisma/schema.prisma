@@ -14,5 +14,14 @@ model Task {
   id           String  @id @default(uuid())
   title        String
   description  String
-  status       String  @default("TODO")    
+  status       String  @default("TODO")
+  userId       String
+  user         User    @relation(fields: [userId], references: [id])
+}
+
+model User {
+  id       String  @id @default(uuid())
+  username String  @unique
+  password String
+  tasks    Task[]
 }
