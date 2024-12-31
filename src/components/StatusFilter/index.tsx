@@ -41,6 +41,7 @@ export default function StatusFilter({ status, setStatus }: StatusFilterProps) {
               <DropdownMenuRadioItem
                 key={idx}
                 value={status === "ALL" ? "" : status}
+                disabled={status === "x" ? true : false}
               >
                 {statusMap[status]}
               </DropdownMenuRadioItem>

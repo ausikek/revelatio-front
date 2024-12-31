@@ -60,5 +60,49 @@ export function applyAllFilters(
   return orderByStatus(statusFilter(status, searchFilter(search, task)), asc);
 }
 
+export const getStatusCounts = (tasks: Task[] | undefined) => {
+  const statusCounts = [
+    { status: "A Fazer", Quantidade: 0 },
+    { status: "Em Progresso", Quantidade: 0 },
+    { status: "Concluído", Quantidade: 0 },
+  ];
+
+  const getStatusReverse = (status: string) => {
+    switch (status) {
+      case "A Fazer":
+        return "TODO";
+      case "Em Progresso":
+        return "PROGRESS";
+      case "Concluído":
+        return "DONE";
+      default:
+        return "";
+    }
+  };
+
+  if (tasks) {
+    tasks.forEach((task) => {
+      const { status } = task;
+
+      statusCounts.find((item) => getStatusReverse(item.status) === status)!
+        .Quantidade++;
+    });
+    return statusCounts;
+  }
+};
+
+export const convertStatus = (value: string) => {
+  switch (value) {
+    case "TODO":
+      return "A Fazer";
+    case "PROGRESS":
+      return "Em Progresso";
+    case "DONE":
+      return "Concluído";
+    default:
+      return "";
+  }
+};
+
 export const fetcher = (...args: Parameters<typeof fetch>) =>
   fetch(...args).then((res) => res.json());

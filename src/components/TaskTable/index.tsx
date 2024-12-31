@@ -20,7 +20,9 @@ import RemoveTaskButton from "@/components/RemoveTask";
 import ShowTask from "@/components/ShowTask";
 import TaskStatus from "@/components/TaskStatus";
 import StatusFilter from "@/components/StatusFilter";
-import StatusOrdering from "../StatusOrdering";
+import StatusOrdering from "@/components/StatusOrdering";
+import LoadingTemplate from "@/components/LoadingTemplate";
+import NoTasks from "@/components/NoTasks";
 
 export default function Tasks() {
   const { data } = useSWR<Task[]>("/api/tasks", fetcher);
@@ -32,11 +34,11 @@ export default function Tasks() {
   const [ascending, setAscending] = useState<string>("none");
 
   if (!data) {
-    return <h1>Você não possui tasks cadastradas</h1>;
+    return <LoadingTemplate />;
   }
 
   if (data.length === 0) {
-    return <h1>Nenhuma task cadastrada</h1>;
+    return <NoTasks />;
   }
 
   const filteredData = applyAllFilters(ascending, search, status, data);

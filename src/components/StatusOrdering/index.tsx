@@ -39,7 +39,7 @@ export default function StatusOrdering({
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>Filtrar por status</DropdownMenuLabel>
+        <DropdownMenuLabel>Ordenar por status</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup value={ascending} onValueChange={setAscending}>
           {["none", "asc", "des"].map((ascending, idx) => {
