@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 import { mutate } from "swr";
 
 export interface RemoveTaskButtonProps {
@@ -30,6 +31,7 @@ export default function RemoveTaskButton({ taskID }: RemoveTaskButtonProps) {
       });
 
       mutate(`/api/tasks/${session?.id}`);
+      toast.success("Task removida com sucesso");
     } catch {
       console.error("Error deleting task");
     }

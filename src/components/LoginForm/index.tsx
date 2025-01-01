@@ -15,9 +15,10 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { signIn, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import { useState } from "react";
 import { Revelatio } from "@/assets";
+import { toast } from "sonner";
 import Image from "next/image";
+import PasswordInput from "../PasswordInput";
 
 export default function LoginForm() {
   const form = useForm<UserT>({
@@ -29,7 +30,6 @@ export default function LoginForm() {
   });
 
   const { status } = useSession();
-  const [error, setError] = useState<boolean>(false);
 
   if (status === "authenticated") {
     redirect("/tasks");
@@ -43,11 +43,10 @@ export default function LoginForm() {
     });
 
     if (result?.error) {
-      setError(true);
+      toast.error("Usuário ou senha inválidos");
       return;
     }
 
-    setError(false);
     try {
       redirect("/tasks");
     } catch {}
@@ -58,14 +57,14 @@ export default function LoginForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleLogin)}
-          className="flex flex-col gap-2"
+          className="flex flex-col gap-2 items-center w-full max-w-sm"
         >
           <Image src={Revelatio} alt="logo revelatio" className="rounded-md" />
           <FormField
             control={form.control}
             name="username"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Username</FormLabel>
                 <FormControl>
                   <Input placeholder="Insira seu username" {...field} />
@@ -78,14 +77,10 @@ export default function LoginForm() {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Senha</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Insira sua senha"
-                    type="password"
-                    {...field}
-                  />
+                  <PasswordInput placeholder="Insira sua senha" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -96,9 +91,6 @@ export default function LoginForm() {
           </Button>
         </form>
       </Form>
-      <span className="text-red-500">
-        {error && "Usuário ou senha inválidos"}
-      </span>
     </div>
   );
 }

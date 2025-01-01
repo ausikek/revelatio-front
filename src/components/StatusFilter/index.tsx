@@ -29,7 +29,6 @@ export default function StatusFilter({ status, setStatus }: StatusFilterProps) {
       <DropdownMenuTrigger asChild>
         <Button className="rounded-full">
           <ListFilter name="w-4 h-4" />
-          Status
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

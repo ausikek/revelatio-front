@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/select";
 import { CircleCheck, CircleDashed, Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 interface EditTaskButtonProps {
   taskID: string;
@@ -78,6 +79,7 @@ export default function EditTaskButton({ taskID, task }: EditTaskButtonProps) {
       });
 
       mutate(`/api/tasks/${session?.id}`);
+      toast.success("Task editada com sucesso");
     } catch {
       console.error("Error adding task");
     }

@@ -37,6 +37,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { mutate } from "swr";
 import { useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 export default function AddTaskButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,6 +65,7 @@ export default function AddTaskButton() {
       });
 
       mutate(`/api/tasks/${session?.id}`);
+      toast.success("Task adicionada com sucesso");
     } catch {
       console.error("Error adding task");
     }

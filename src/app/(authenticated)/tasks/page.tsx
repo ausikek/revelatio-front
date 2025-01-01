@@ -1,11 +1,9 @@
-import AddTaskButton from "@/components/AddTask";
 import Tasks from "@/components/TaskTable";
 
 export default function TaskPage() {
   return (
     <div className="flex flex-col items-center justify-between py-5 pr-7 lg:py-10 lg:pl-3 lg:pr-10 h-full w-full">
       <Tasks />
-      <AddTaskButton />
     </div>
   );
 }
