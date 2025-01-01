@@ -8,7 +8,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { Task } from "@/interfaces";
 import { fetcher, getStatusCounts } from "@/lib/utils";
 import { useSession } from "next-auth/react";
@@ -33,7 +32,6 @@ const chartConfig = {
 
 export default function AdminCharts() {
   const { data } = useSWR<Task[]>("/api/tasks", fetcher);
-  const isMobile = useIsMobile();
   const { status: sessionStatus } = useSession();
 
   if (sessionStatus === "unauthenticated") {
@@ -41,10 +39,13 @@ export default function AdminCharts() {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full flex items-center flex-col pt-7 pr-12">
+      <h1>
+        {`Ao total, são ${data?.length ?? 0} tarefas cadastradas no sistema`}
+      </h1>
       <ChartContainer
         config={chartConfig}
-        className="pr-7 pt-10 w-1/2 min-h-[200px]"
+        className="pt-10 w-full min-h-[300px] sm:min-h-[400px]"
       >
         <BarChart data={getStatusCounts(data)}>
           <CartesianGrid vertical={false} />
@@ -53,7 +54,7 @@ export default function AdminCharts() {
             tickLine={false}
             tickMargin={10}
             axisLine={false}
-            tickFormatter={(value) => (!isMobile ? value : "")}
+            tickFormatter={(value) => value}
           />
           <YAxis tickLine={false} axisLine={false} />
           <ChartTooltip content={<ChartTooltipContent />} />
