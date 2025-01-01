@@ -5,14 +5,7 @@ import { UpdateTaskDTO } from "../task-dto";
 export async function GET(req: NextRequest) {
   const id: string | undefined = req.nextUrl.pathname.split("/").pop();
 
-  if (!id) {
-    return NextResponse.json({
-      status: 400,
-      message: "Bad Request",
-    });
-  }
-
-  const tasks = await taskController.getByUserId(id);
+  const tasks = await taskController.getByUserId(id as string);
 
   return NextResponse.json(tasks);
 }
@@ -21,19 +14,23 @@ export async function PATCH(req: NextRequest) {
   const id: string | undefined = req.nextUrl.pathname.split("/").pop();
 
   if (!id) {
-    return NextResponse.json({
-      status: 400,
-      message: "Bad Request",
-    });
+    return NextResponse.json(
+      {
+        message: "Bad Request",
+      },
+      { status: 400 }
+    );
   }
 
-  const taskID = taskController.getById(id);
+  const task = await taskController.getById(id);
 
-  if (!taskID) {
-    return NextResponse.json({
-      status: 404,
-      message: `Task with id ${id} not found`,
-    });
+  if (!task) {
+    return NextResponse.json(
+      {
+        message: `Task with id ${id} not found`,
+      },
+      { status: 404 }
+    );
   }
 
   try {
@@ -41,12 +38,13 @@ export async function PATCH(req: NextRequest) {
     const updatedTask = await taskController.update(id, body);
 
     return NextResponse.json(updatedTask);
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({
-      status: 500,
-      message: "Server Error",
-    });
+  } catch {
+    return NextResponse.json(
+      {
+        message: "Server Error",
+      },
+      { status: 500 }
+    );
   }
 }
 
@@ -54,30 +52,26 @@ export async function DELETE(req: NextRequest) {
   const id: string | undefined = req.nextUrl.pathname.split("/").pop();
 
   if (!id) {
-    return NextResponse.json({
-      status: 400,
-      message: "Bad Request",
-    });
+    return NextResponse.json(
+      {
+        message: "Bad Request",
+      },
+      { status: 400 }
+    );
   }
 
-  const taskID = taskController.getById(id);
+  const taskID = await taskController.getById(id);
 
   if (!taskID) {
-    return NextResponse.json({
-      status: 404,
-      message: `Task with id ${id} not found`,
-    });
+    return NextResponse.json(
+      {
+        message: `Task with id ${id} not found`,
+      },
+      { status: 404 }
+    );
   }
 
-  try {
-    const deletedTask = await taskController.delete(id);
+  const deletedTask = await taskController.delete(id);
 
-    return NextResponse.json(deletedTask);
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({
-      status: 500,
-      message: "Server Error",
-    });
-  }
+  return NextResponse.json(deletedTask);
 }

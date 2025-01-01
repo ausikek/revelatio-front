@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    return NextResponse.json(user); // Defaults to 200
+    return NextResponse.json(user);
   } catch (error) {
     console.error(error);
 
